@@ -1,5 +1,0 @@
-# オブジェクトを作成
-+create_object_1:
-  action>: CreateObject
-  object: ${outlookObject}
-  private: false

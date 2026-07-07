@@ -1,6 +1,0 @@
-# テキストを作成
-+text_1:
-  action>: Text
-  display_name>: 'テキストを作成'
-  text: test
-  private: false

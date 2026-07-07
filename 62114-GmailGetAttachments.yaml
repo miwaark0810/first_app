@@ -1,6 +1,0 @@
-# 添付ファイルをダウンロード
-+gmail_get_attachments_1:
-  action>: GmailGetAttachments
-  mail: ${gmailObject}
-  ignoreError: false
-  private: false

@@ -1,4 +1,0 @@
-# 待機する
-+wait_1:
-  action>: Wait
-  time: 2000000

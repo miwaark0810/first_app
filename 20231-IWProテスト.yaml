@@ -1,0 +1,18 @@
+# IWproアイテム属性を設定する
++set_i_wpro_item_attribute_1:
+  action>: SetIWproItemAttribute
+  display_name>: 'IWproアイテム属性を設定する'
+  provider: iwpro_7c037402ab1b1a256d12
+  tenantId: ST19F1BB94C7E
+  itemId: 52
+  strict: false
+  customAttributes: [{"keyId":1,"value":2},{"keyId":1,"value":"testtest"}]
+  private: false
+  meta:
+    display:
+      provider:
+        type: chip
+        label: 'Fujifilm IWpro (2026年07月07日11時11分 追加)'
+        icon: iwpro
+    action:
+      disabled: false

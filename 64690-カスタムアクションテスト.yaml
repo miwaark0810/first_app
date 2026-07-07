@@ -1,5 +1,0 @@
-# テキストを作成
-+text_1:
-  action>: Text
-  text: '${test}です！！！！'
-  private: false
