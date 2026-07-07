@@ -1,0 +1,512 @@
+# 変数に保存
++store_value_2:
+  action>: StoreValue
+  key: puppeteerVersion
+  value: HeadlessChrome/112.0.5614.0
+  private: false
+
+# ブラウザを開く
++open_browser_1:
+  action>: OpenBrowser
+  url: https://www.ugtop.com/spill.shtml
+  lang: ja-JP
+  headless: true
+  confirm: true
+  windowSize: 1920 x 1080
+  useShadowDomSelector: false
+  private: false
+
+# ページからクッキーを取得
++export_cookies_2:
+  action>: ExportCookies
+  browser: "+open_browser_1"
+  private: false
+
+# PDFに出力
++page_p_d_f_1:
+  action>: PagePDF
+  browser: "+open_browser_1"
+  format: A4
+  media: print
+  printBackground: false
+  scale: 1
+  private: false
+
+# ページ内でJavaScriptを実行する
++inject_script_1:
+  action>: InjectScript
+  browser: "+open_browser_1"
+  code: 'window.navigator.userAgent;
+
+    '
+  returnValue: true
+  private: false
+
+# 変数に保存
++store_value_1:
+  action>: StoreValue
+  key: userAgent
+  value: "+inject_script_1"
+  private: false
+
+# スクリプトを実行
++run_script_1:
+  action>: RunScript
+  code: 'return !userAgent.includes(puppeteerVersion);
+
+    '
+  private: false
+
+# 真のとき
++if_1:
+  if>: "+run_script_1"
+  _do:
+
+    # 強制終了
+    +kill_attempt_1:
+      action>: KillAttempt
+      message: テストするバージョンが合っているか確認してください
+      private: false
+
+# URLへ遷移
++go_to_1:
+  action>: GoTo
+  browser: "+open_browser_1"
+  url: https://trade.matsui.co.jp/mgap/login
+  private: false
+
+# 文字入力
++type_text_1:
+  action>: TypeText
+  browser: "+go_to_1"
+  selector: "#login-id"
+  text: hello
+  clearValue: false
+  ignoreError: true
+  private: false
+
+# パスワード入力
++type_password_1:
+  action>: TypePassword
+  browser: "+type_text_1"
+  selector: "#login-password"
+  password: "********"
+  ignoreError: true
+  private: false
+
+# マウスオーバー（「こちら」に下線がないか確認　※うまくいかない場合あるのでその時は個別の yaml で確認する）
++hover_1:
+  action>: Hover
+  browser: "+type_password_1"
+  selector: "#login-form > main > div.l-content > div:nth-child(2) > div > section
+    > div > p:nth-child(2) > a"
+  ignoreError: true
+  highResolution: true
+  private: false
+
+# URLへ遷移
++go_to_2:
+  action>: GoTo
+  browser: "+hover_1"
+  url: http://www.htmq.com/html/select.shtml
+  private: false
+
+# 選択肢を選ぶ
++select_option_1:
+  action>: SelectOption
+  browser: "+go_to_2"
+  selector: ":nth-child(1) > select"
+  value: ''
+  text: O型
+  confirm: true
+  ignoreError: true
+  private: false
+
+# 要素のスクリーンショットを撮る
++take_element_shot_1:
+  action>: TakeElementShot
+  browser: "+select_option_1"
+  selector: body
+  type: png
+  ignoreError: false
+  private: false
+
+# テキストを取得
++get_text_1:
+  action>: GetText
+  browser: "+select_option_1"
+  selector: ":nth-child(1) > select"
+  ignoreError: true
+  private: false
+
+# スクレイピング
++scrape_page_1:
+  action>: ScrapePage
+  browser: "+select_option_1"
+  selector: h1
+  text_only: false
+  ignoreError: true
+  private: false
+
+# URLを取得
++get_u_r_l_1:
+  action>: GetURL
+  browser: "+select_option_1"
+  private: false
+
+# 開いているタブを表示
++show_tabs_1:
+  action>: ShowTabs
+  browser: "+select_option_1"
+  private: false
+
+# URLへ遷移
++go_to_3:
+  action>: GoTo
+  browser: "+select_option_1"
+  url: https://www.tagindex.com/html5/text/a_download.html
+  private: false
+
+# クリック
++click_1:
+  action>: Click
+  browser: "+go_to_3"
+  selector: dd > p > a
+  confirm: true
+  waitAfter: 3000
+  ignoreError: true
+  timeout: 30000
+  private: false
+
+# ダウンロード完了を待つ
++wait_for_download_1:
+  action>: WaitForDownload
+  private: false
+
+# URLへ遷移
++go_to_9:
+  action>: GoTo
+  browser: "+click_1"
+  url: https://www.data.jma.go.jp/obd/stats/data/mdrr/pre_rct/alltable/preall00.html
+  private: false
+
+# download ボタンを設置する
++inject_script_2:
+  action>: InjectScript
+  browser: "+go_to_9"
+  code: |
+    var el = document.createElement("button");
+    document.body.append(el);
+    el.id = "downloadCSV";
+    el.textContent = "download";
+    el.onclick = function() {
+      let el = document.createElement("a");
+      el.href = "./preall00_rct.csv";
+      el.click();
+    };
+  returnValue: false
+  private: false
+
+# クリック
++click_3:
+  action>: Click
+  browser: "+inject_script_2"
+  selector: "#downloadCSV"
+  confirm: true
+  ignoreError: true
+  timeout: 30000
+  private: false
+
+# ダウンロードファイル一覧 - 2つのファイルが取得できているはず
++get_download_files_1:
+  action>: GetDownloadFiles
+  order: ASC
+  sort_by: FILENAME
+  private: false
+
+# URLへ遷移
++go_to_5:
+  action>: GoTo
+  browser: "+click_1"
+  url: http://www.htmq.com/html/table.shtml
+  private: false
+
+# テーブルデータを取得
++extract_data_from_table_1:
+  action>: ExtractDataFromTable
+  browser: "+click_1"
+  selector: table
+  ignoreError: true
+  private: false
+
+# ページからデータを抽出
++extract_data_1:
+  action>: ExtractData
+  browser: "+open_browser_1"
+  extractor: '[{"name":"メニュー","selectors":["tbody > :nth-child(2) > :nth-child(1)"]},{"name":"説明","selectors":["tbody
+    > :nth-child(2) > :nth-child(2)"]}]'
+  format: csv
+  multiple: false
+  private: false
+
+# URLへ遷移
++go_to_4:
+  action>: GoTo
+  browser: "+click_1"
+  url: https://phpjavascriptroom.com/?t=js&p=sendform
+  private: false
+
+# キーを送信
++send_keys_1:
+  action>: SendKeys
+  browser: "+go_to_4"
+  selector: ".a_chk > :nth-child(6) > .output > form > :nth-child(1)"
+  keys: hello
+  ignoreError: true
+  private: false
+
+# フォームを送信
++submit_form_1:
+  action>: SubmitForm
+  browser: "+send_keys_1"
+  selector: "#page-body > div.a_chk > div:nth-child(6) > div.output > form"
+  ignoreError: true
+  private: false
+
+# スクリーンショットを撮る
++take_screenshot_1:
+  action>: TakeScreenshot
+  browser: "+submit_form_1"
+  full_page: false
+  type: png
+  private: false
+
+# 要素を見つける
++find_element_1:
+  action>: FindElement
+  browser: "+submit_form_1"
+  find_by: selector
+  value: body
+  timeout: 30000
+  visible: true
+  private: false
+
+# ページからクッキーを取得
++export_cookies_1:
+  action>: ExportCookies
+  browser: "+submit_form_1"
+  private: false
+
+# ページにクッキーをセット
++import_cookies_1:
+  action>: ImportCookies
+  browser: "+submit_form_1"
+  id: "+export_cookies_1"
+  private: false
+
+# URLへ遷移
++go_to_6:
+  action>: GoTo
+  browser: "+import_cookies_1"
+  url: https://docs.autoro.io/overview/run-robot
+  waitAfter: 6000
+  private: false
+
+# クリック
++click_4:
+  action>: Click
+  browser: "+go_to_6"
+  selector: ".r-1471scf .r-crgep1 > span span"
+  confirm: true
+  ignoreError: true
+  timeout: 30000
+  private: false
+
+# 待機する
++wait_1:
+  action>: Wait
+  time: 5000
+  private: false
+
+# 開いているタブを表示
++show_tabs_2:
+  action>: ShowTabs
+  browser: "+click_4"
+  private: false
+
+# タブを切り替える
++switch_tab_1:
+  action>: SwitchTab
+  browser: "+click_4"
+  tab: 1
+  private: false
+
+# タブを閉じる
++close_tab_1:
+  action>: CloseTab
+  browser: "+switch_tab_1"
+  tab: '0'
+  private: false
+
+# 開いているタブを表示
++show_tabs_3:
+  action>: ShowTabs
+  browser: "+close_tab_1"
+  waitBefore: 2000
+  private: false
+
+# URLへ遷移
++go_to_7:
+  action>: GoTo
+  browser: "+switch_tab_1"
+  url: https://itsakura.com/jquery-ui-draggable
+  private: false
+
+# ドラッグアンドドロップ
++drag_and_drop_1:
+  action>: DragAndDrop
+  browser: "+switch_tab_1"
+  target: "#box1"
+  destination: "#table1"
+  positionX: center
+  positionY: middle
+  private: false
+
+# スクリーンショットを撮る
++take_screenshot_2:
+  action>: TakeScreenshot
+  browser: "+drag_and_drop_1"
+  full_page: true
+  type: png
+  private: false
+
+# URLへ遷移
++go_to_8:
+  action>: GoTo
+  browser: "+drag_and_drop_1"
+  url: https://www.google.com/recaptcha/api2/demo
+  private: false
+
+# CAPTCHAを解決
++solve_captcha_1:
+  action>: SolveCaptcha
+  browser: "+go_to_8"
+  type: reCAPTCHA
+  executeCallback: true
+  private: false
+
+# クリック
++click_2:
+  action>: Click
+  browser: "+go_to_8"
+  selector: "#recaptcha-demo-submit"
+  confirm: true
+  waitAfter: 3000
+  ignoreError: true
+  timeout: 30000
+  private: false
+
+# スクリーンショットを撮る
++take_screenshot_3:
+  action>: TakeScreenshot
+  browser: "+click_2"
+  full_page: false
+  type: png
+  waitBefore: 3000
+  private: false
+
+# ブラウザを閉じる
++close_browser_1:
+  action>: CloseBrowser
+  browser: "+click_2"
+  private: false
+
+# ファイルを取得
++get_file_1:
+  action>: GetFile
+  provider: local
+  filename: rc_01117ac57726f82bc2cd
+  private: false
+  meta:
+    display:
+      filename:
+        label: 1.png
+        icon: text
+        type: chip
+
+# ブラウザを開く
++open_browser_2:
+  action>: OpenBrowser
+  url: https://pdf2png.com/ja/
+  lang: ja-JP
+  headless: true
+  confirm: true
+  useShadowDomSelector: false
+  private: false
+
+# フォームでファイルを送信
++set_file_to_upload_1:
+  action>: SetFileToUpload
+  browser: "+open_browser_2"
+  selector: input[type=file]
+  file: "+get_file_1"
+  ignoreError: true
+  private: false
+
+# スクリーンショットを撮る
++take_screenshot_4:
+  action>: TakeScreenshot
+  browser: "+set_file_to_upload_1"
+  full_page: false
+  type: png
+  private: false
+
+# ブラウザを閉じる
++close_browser_2:
+  action>: CloseBrowser
+  browser: "+set_file_to_upload_1"
+  private: false
+
+# ブラウザを開く
++open_browser_3:
+  action>: OpenBrowser
+  url: https://www.yahoo.co.jp/
+  lang: ja-JP
+  headless: true
+  confirm: true
+  windowSize: 1920 x 1080
+  useShadowDomSelector: false
+  private: false
+
+# 要素の属性を取得
++get_attribute_1:
+  action>: GetAttribute
+  browser: "+open_browser_3"
+  selector: "._3YIqBohnzWyU3NQ8zb-mQI > .yMWCYupQNdgppL-NV6sMi"
+  attribute: href
+  ignoreError: true
+  private: false
+
+# XY座標でクリック
++click_point_1:
+  action>: ClickPoint
+  browser: "+open_browser_3"
+  x: 1433
+  "y": 11
+  confirm: true
+  private: false
+
+# スクリーンショットを撮る
++take_screenshot_5:
+  action>: TakeScreenshot
+  browser: "+click_point_1"
+  full_page: false
+  type: png
+  waitBefore: 3000
+  private: false
+
+# ブラウザを閉じる
++close_browser_3:
+  action>: CloseBrowser
+  browser: "+click_point_1"
+  private: false

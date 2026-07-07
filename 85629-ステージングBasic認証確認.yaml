@@ -1,0 +1,217 @@
+# ログインページを開く
++open_browser_1:
+  action>: OpenBrowser
+  url: 'https://tutorial-staging:password9876@console.devk8s.com/users/sign_in '
+  lang: ja-JP
+  timeZone: Asia/Tokyo
+  headless: true
+  confirm: true
+  windowSize: 1920 x 1080
+  useShadowDomSelector: false
+  private: false
+
+# Emailを入力
++type_text_4:
+  action>: TypeText
+  browser: "+open_browser_1"
+  selector: "#app > div > div > div > div > div.card__text.pt-0 > form > div:nth-child(2)
+    > div.input-group__input > input[type=email]"
+  text: kaihatsu+admin@robokura.com
+  clearValue: false
+  ignoreError: true
+  private: false
+
+# パスワード入力
++type_password_1:
+  action>: TypePassword
+  browser: "+open_browser_1"
+  selector: "#app > div > div > div > div > div.card__text.pt-0 > form > div:nth-child(3)
+    > div.input-group__input > input[type=password]"
+  password: "********"
+  waitAfter: 3000
+  ignoreError: true
+  private: false
+
+# ログインボタンをクリック
++click_5:
+  action>: Click
+  browser: "+open_browser_1"
+  selector: "#app > div > div > div > div > div.card__text.pt-0 > form > div.layout.justify-center
+    > div > button"
+  confirm: true
+  waitAfter: 5000
+  ignoreError: true
+  timeout: 30000
+  private: false
+
+# UI_E2E_TESTを検索
++type_text_3:
+  action>: TypeText
+  browser: "+click_5"
+  selector: "#inspire > div.application--wrap > div > main > div > div > div.view
+    > div > div.layout.mb-4.row.wrap > div.input-group.input-group--append-icon.input-group--hide-details.input-group--text-field.input-group--single-line.primary--text
+    > div.input-group__input > input[type=text]"
+  text: UI_E2E_TEST
+  clearValue: false
+  ignoreError: true
+  private: false
+
+# UI_E2E_TESTをクリック
++click_1:
+  action>: Click
+  browser: "+type_text_3"
+  selector: "#inspire > div.application--wrap > div > main > div > div > div.view
+    > div > div:nth-child(3) > ul > li > div"
+  confirm: true
+  ignoreError: true
+  timeout: 30000
+  private: false
+
+# XY座標でクリック
++click_point_1:
+  action>: ClickPoint
+  browser: "+click_1"
+  x: 500
+  "y": 500
+  confirm: true
+  waitAfter: 5000
+  private: false
+
+# コネクションをクリック
++click_2:
+  action>: Click
+  browser: "+click_point_1"
+  selector: "#mainNav > div:nth-child(2) > div:nth-child(9) > a"
+  confirm: true
+  waitAfter: 5000
+  ignoreError: true
+  timeout: 30000
+  private: false
+
+# 要素を見つける
++find_element_1:
+  action>: FindElement
+  browser: "+click_2"
+  find_by: xpath
+  value: //div[contains(@class, "flex xs4") and contains(., "コネクション更新テスト")]//div[contains(@class,
+    "provider-id")]
+  timeout: 30000
+  visible: true
+  private: false
+
+# テキストを取得
++get_text_1:
+  action>: GetText
+  browser: "+click_2"
+  selector: "+find_element_1"
+  ignoreError: true
+  private: false
+
+# 変数に保存
++store_value_2:
+  action>: StoreValue
+  key: beforeUpdateConnection
+  value: "+get_text_1"
+  setIfNotDefined: false
+  private: false
+
+# 更新ボタンをクリック
++click_8:
+  action>: Click
+  browser: "+click_2"
+  selector: "#inspire > div.application--wrap > div > main > div > div.mx-3.mt-3.card
+    > div.container.grid-list-lg > div > div:nth-child(2) > div > div:nth-child(5)
+    > button:nth-child(3) > div"
+  confirm: true
+  ignoreError: true
+  timeout: 30000
+  private: false
+
+# 確認ダイアログのはいをクリック
++click_9:
+  action>: Click
+  browser: "+click_8"
+  selector: "#inspire > div.dialog__content.dialog__content__active > div > div >
+    div.card__actions > button.btn.error > div"
+  confirm: true
+  ignoreError: true
+  timeout: 30000
+  private: false
+
+# Bucket Name を入力
++type_text_6:
+  action>: TypeText
+  browser: "+click_9"
+  selector: "#inspire > div.dialog__content.dialog__content__active > div > div >
+    div.card__text > div > div > div > form > div:nth-child(1) > div.input-group__input
+    > input[type=text]"
+  text: コネクション更新テスト
+  clearValue: false
+  waitAfter: 5000
+  ignoreError: true
+  private: false
+
+# Access Key ID を入力
++type_text_7:
+  action>: TypeText
+  browser: "+click_9"
+  selector: "#inspire > div.dialog__content.dialog__content__active > div > div >
+    div.card__text > div > div > div > form > div:nth-child(2) > div.input-group__input
+    > input[type=text]"
+  text: コネクション更新テスト
+  clearValue: false
+  ignoreError: true
+  private: false
+
+# Secret Access Key を入力
++type_text_8:
+  action>: TypeText
+  browser: "+click_9"
+  selector: "#inspire > div.dialog__content.dialog__content__active > div > div >
+    div.card__text > div > div > div > form > div:nth-child(3) > div.input-group__input
+    > input[type=text]"
+  text: コネクション更新テスト
+  clearValue: false
+  ignoreError: true
+  private: false
+
+# 登録をクリック
++click_10:
+  action>: Click
+  browser: "+type_text_8"
+  selector: ".dialog--active .btn.primary--text .btn__content"
+  confirm: true
+  waitAfter: 10000
+  ignoreError: true
+  timeout: 30000
+  private: false
+
+# URLを取得
++get_u_r_l_1:
+  action>: GetURL
+  browser: "+click_10"
+  private: false
+
+# 比較する
++compare_1:
+  action>: Compare
+  subject: "+get_u_r_l_1"
+  compare_with: https://console.devk8s.com/projects/1454/connections
+  method: CONTAINS
+  not: false
+  private: false
+
+# 真のとき
++if_1:
+  if>: "+compare_1"
+  _do:
+
+    # 正常終了
+    +exit_1:
+      exit>: OK
+
+# 強制終了
++kill_attempt_1:
+  action>: KillAttempt
+  message: NG
+  private: false

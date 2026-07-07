@@ -1,0 +1,9 @@
+# ブラウザを開く
++open_browser_1:
+  action>: OpenBrowser
+  url: 'https://testpage.jp/tool/ip_user_agent.php'
+  lang: 'ja-JP'
+  headless: true
+  confirm: true
+  useShadowDomSelector: false
+  private: false

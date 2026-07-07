@@ -1,0 +1,32 @@
+# ファイルを取得
++get_file_1:
+  action>: GetFile
+  provider: local
+  filename: rc_71994c75f1ee13772259
+  private: false
+  meta:
+    display:
+      filename:
+        label: '14.【64期】入出庫実績のコピー4.xlsx'
+        icon: text
+        type: chip
+
+# ワークシートを選択
++select_sheet_3:
+  action>: SelectSheet
+  filename: +get_file_1
+  sheetname: '10月'
+  middleware: xlsx
+  private: false
+
+# 範囲に書き込む
++write_range_1:
+  action>: WriteRange
+  worksheet: +select_sheet_3
+  table: [["test"]]
+  celllabel: A8
+  private: false
+
+# 正常終了
++exit_1:
+  exit>: ''

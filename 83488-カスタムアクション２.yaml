@@ -1,0 +1,27 @@
+# テキストを作成
++text_1:
+  action>: Text
+  text: ${text}
+  private: false
+
+# カスタムアクション１
++call_custom_action_1:
+  action>: CallCustomAction
+  id: ca_9bde0c6057b3ab3661ed
+  params:
+    text: ''
+  meta:
+    version: '2024-10-29T09:13:39.000Z'
+    interface:
+      params:
+        text: Text
+      output: Text
+      pickers:
+        text: noPicker
+    display:
+      id:
+        type: chip
+        label: 'カスタムアクション１'
+        icon: build
+        imageUrl: ''
+        color: '#C2185B'

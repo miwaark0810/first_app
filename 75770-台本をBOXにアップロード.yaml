@@ -1,0 +1,26 @@
+# ファイルを取得
++get_file_1:
+  action>: GetFile
+  provider: local
+  filename: rc_4f31f7064b6204a0ad54
+  private: false
+  meta:
+    display:
+      filename:
+        label: '行間を指定して出力.docx'
+        icon: text
+        type: chip
+
+# ファイルを保存
++save_file_1:
+  action>: SaveFile
+  provider: box_a42c91f267212de0bf0c
+  filename: +get_file_1
+  createPath: false
+  private: false
+  meta:
+    display:
+      provider:
+        type: chip
+        label: 'Box (kaihatsu@robokura.com)'
+        icon: box

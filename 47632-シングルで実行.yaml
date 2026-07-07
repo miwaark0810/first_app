@@ -1,0 +1,58 @@
+# ブラウザを開く
++open_browser_1:
+  action>: OpenBrowser
+  url: 'https://www.yahoo.co.jp/'
+  lang: 'ja-JP'
+  headless: true
+
+# クリック
++click_1:
+  action>: Click
+  browser: +open_browser_1
+  selector: ':nth-child(1) > .QLtbNZwO-lssuRUcWewbd > .yMWCYupQNdgppL-NV6sMi > ._2cXD1uC4eaOih4-zkRgqjU > .TRuzXRRZHRqbqgLUCCco9 > ._3cl937Zpn1ce8mDKd5kp7u > .fQMqQTGJTbIMxjQwZA2zk'
+  confirm: true
+  ignoreError: true
+  timeout: 30000
+
+# 待機する
++wait_1:
+  action>: Wait
+  time: 3000
+
+# スクリーンショットを撮る
++take_screenshot_1:
+  action>: TakeScreenshot
+  browser: +click_1
+  full_page: false
+  type: png
+
+# ブラウザを閉じる
++close_browser_1:
+  action>: CloseBrowser
+  browser: +click_1
+
+# テキストを作成
++text_1:
+  action>: Text
+  text: test
+
+# Facebook広告のレポート取得
++get_facebook_ads_report_1:
+  action>: GetFacebookAdsReport
+  provider: fbads_db72903e122d86fc7275
+  accountId: 2205554332789942
+  startDate: '2022-06-20'
+  endDate: '2022-06-21'
+  fields: account_id
+  breakdowns: ''
+  limit: 3000
+  meta:
+    display:
+      provider:
+        type: chip
+        label: 'Facebook Ads (Dev Tutorial)'
+        icon: facebookads
+      accountId:
+        label: 'Robotic Crowd'
+        icon: facebookads
+        type: chip

@@ -1,0 +1,62 @@
+# ファイルを取得
++get_file_1:
+  action>: GetFile
+  display_name>: 'ファイルを取得'
+  provider: gdrive_3e4a5a44b40a7cfef4e4
+  filename: 1yMyOqQ4S0x91SUWT_wqFB2n9cJ0GWgjK
+  private: false
+  meta:
+    display:
+      provider:
+        type: chip
+        label: 'Google Drive (ayumu.niwa@autoro.io)'
+        icon: googledrive
+      filename:
+        label: '32-Session Queueの完了率-data-2025-08-04 11_01_57.csv'
+        icon: text
+        type: chip
+    action:
+      disabled: false
+
+# CSVを読み込む
++read_c_s_v_1:
+  action>: ReadCSV
+  display_name>: 'CSVを読み込む'
+  filename: +get_file_1
+  headers: true
+  private: false
+  meta:
+    action:
+      disabled: false
+
+# 既存のスプレッドシートを取得
++get_spreadsheet_1:
+  action>: GetSpreadsheet
+  display_name>: '既存のスプレッドシートを取得'
+  provider: gsheet_2e7ae52c519166d621e4
+  spreadsheet_id: '1GdT_tiEDk3n9u5LdGgLLrrWVKyjp-0_m-ran1eADXk4'
+  private: false
+  meta:
+    display:
+      provider:
+        type: chip
+        label: 'Google Spreadsheet (ayumu.niwa@autoro.io)'
+        icon: googlespreadsheet
+      spreadsheet_id:
+        label: SLI
+        icon: text
+        type: chip
+    action:
+      disabled: false
+
+# セルの値を更新
++update_cells_1:
+  action>: UpdateCells
+  display_name>: 'セルの値を更新'
+  spreadsheet: +get_spreadsheet_1
+  range: 'シート42'
+  values: +read_c_s_v_1
+  private: false
+  meta:
+    action:
+      disabled: false

@@ -1,0 +1,5 @@
+# リストを作成
++create_list_1:
+  action>: CreateList
+  items: ${gmailObject}
+  private: false

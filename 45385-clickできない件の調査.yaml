@@ -1,0 +1,92 @@
+# ブラウザを開く
++open_browser_1:
+  action>: OpenBrowser
+  url: 'https://www2.njss.info/users/login'
+  lang: 'ja-JP'
+  headless: false
+  windowSize: '1920 x 1080'
+
+# 文字入力
++type_text_1:
+  action>: TypeText
+  browser: +open_browser_1
+  selector: '#email'
+  text: 'ren.murayama125@testmrym.com'
+  clearValue: false
+  ignoreError: true
+
+# 文字入力
++type_text_2:
+  action>: TypeText
+  browser: +type_text_1
+  selector: '#password'
+  text: 'tH@J5un3CCyzfpn'
+  clearValue: false
+  ignoreError: true
+
+# クリック
++click_1:
+  action>: Click
+  browser: +type_text_2
+  selector: '.Button--Orange > .Button__Text'
+  confirm: true
+  waitAfter: 5000
+  ignoreError: true
+  timeout: 30000
+
+# URLへ遷移
++go_to_1:
+  action>: GoTo
+  browser: +click_1
+  url: 'https://www2.njss.info/users/home'
+
+# クリック_モーダル表示
++click_2:
+  action>: Click
+  browser: +go_to_1
+  selector: '.Button__Text'
+  confirm: true
+  ignoreError: true
+  timeout: 30000
+
+# 真のとき
++if_2:
+  if>: false
+  _do:
+
+    # クリック_新着案件を選択
+    +click_3:
+      action>: Click
+      browser: +click_2
+      selector: '#new-arrival'
+      confirm: true
+      ignoreError: true
+      timeout: 30000
+
+    # クリック_ボタンクリックしたい
+    +click_4:
+      action>: Click
+      browser: +click_3
+      selector: '#GA__ExecuteBulkDownloadOnMyPage'
+      confirm: true
+      ignoreError: true
+      timeout: 30000
+
+# 成功するやつ
++if_1:
+  if>: false
+  _do:
+
+    # ページ内でJavaScriptを実行する
+    +inject_script_1:
+      action>: InjectScript
+      browser: +go_to_1
+      code: "const token = document.cookie.match(\n  /(?<=auth\\._token.user\\=).*(?=;\\sauth\\._token_expiration)/\n)[0];\nconst endpoint = \"https://api.www2.njss.info/v1/search-keywords/csv-request\";\nconst body = { property: \"new-arrival\", term: 0 };\n\nconst ajax = new XMLHttpRequest();\najax.open(\"post\", endpoint, false);\najax.setRequestHeader(\"authorization\", decodeURIComponent(token));\najax.setRequestHeader(\"content-type\", \"application/json\");\najax.onload = e => {\n  const fileKey = JSON.parse(ajax.response).file_key;\n  const fileEndpoint =\n    \"https://api.www2.njss.info/v1/csv-download?file_key=\" + fileKey;\n\n  const fileGetAjax = new XMLHttpRequest();\n  fileGetAjax.open(\"get\", fileEndpoint);\n  fileGetAjax.responseType = \"blob\";\n  fileGetAjax.setRequestHeader(\"authorization\", decodeURIComponent(token));\n  fileGetAjax.setRequestHeader(\"content-type\", \"application/json\");\n  fileGetAjax.onload = () => {\n    console.log(fileGetAjax.response);\n    const fileKey = JSON.parse(ajax.response).file_key;\n    const file = fileGetAjax.response;\n    const elm = document.createElement(\"a\");\n    elm.href = window.URL.createObjectURL(file);\n    elm.download = getFileName(token, fileKey);\n    elm.click();\n  };\n  fileGetAjax.send();\n};\najax.send(JSON.stringify(body));\n\nfunction getFileName(token, key) {\n  const endpoint =\n    \"https://api.www2.njss.info/v1/csv-download/file-name?file_key=\" + key;\n  const nameAjax = new XMLHttpRequest();\n  nameAjax.open(\"get\", endpoint, false);\n  nameAjax.setRequestHeader(\"authorization\", decodeURIComponent(token));\n  nameAjax.setRequestHeader(\"content-type\", \"application/json\");\n  nameAjax.send();\n  return JSON.parse(nameAjax.response).file_name;\n}\n"
+      waitAfter: 5000
+      returnValue: false
+
+# ダウンロードファイル一覧
++get_download_files_1:
+  action>: GetDownloadFiles
+  order: ASC
+  sort_by: FILENAME

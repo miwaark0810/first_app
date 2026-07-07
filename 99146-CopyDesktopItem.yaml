@@ -1,0 +1,12 @@
+# フォルダ・ファイルを複製する
++copy_desktop_item_1:
+  action>: CopyDesktopItem
+  display_name>: 'フォルダ・ファイルを複製する'
+  itemPath: '/Users/ayumuniwa/移動元/【最終フォーマットサンプル】大東テストデータ_homes_format_test (10).csv'
+  copyTo: '/Users/ayumuniwa/移動先/copytest/'
+  createPath: true
+  conflictHandlingOption: KEEP_BOTH
+  private: false
+  meta:
+    action:
+      disabled: false

@@ -1,0 +1,5 @@
+# テキストを作成
++text_1:
+  action>: Text
+  text: '最初に設定したWF'
+  private: false

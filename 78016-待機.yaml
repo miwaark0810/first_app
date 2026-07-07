@@ -1,0 +1,5 @@
+# 待機する
++wait_1:
+  action>: Wait
+  time: 100000
+  private: false

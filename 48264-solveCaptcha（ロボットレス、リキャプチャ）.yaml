@@ -1,0 +1,54 @@
+# ブラウザを開く
++open_browser_1:
+  action>: OpenBrowser
+  url: 'https://anti-captcha.com/demo/?page=recaptcha_v2_callback'
+  lang: 'ja-JP'
+  headless: true
+  useShadowDomSelector: false
+  private: false
+
+# 文字入力
++type_text_1:
+  action>: TypeText
+  browser: +open_browser_1
+  selector: '#login'
+  text: login
+  clearValue: false
+  ignoreError: true
+  private: false
+
+# 文字入力
++type_text_2:
+  action>: TypeText
+  browser: +type_text_1
+  selector: '#pass'
+  text: pass
+  clearValue: false
+  ignoreError: true
+  private: false
+
+# CAPTCHAを解決
++solve_captcha_1:
+  action>: SolveCaptcha
+  browser: +type_text_2
+  type: reCAPTCHA
+  selector: '#g-recaptcha-response'
+  executeCallback: true
+  private: false
+
+# スクリーンショットを撮る
++take_screenshot_1:
+  action>: TakeScreenshot
+  browser: +type_text_2
+  full_page: false
+  type: png
+  waitBefore: 7000
+  private: false
+
+# ファイルを保存
++save_file_1:
+  action>: SaveFile
+  provider: local
+  filename: +take_screenshot_1
+  createPath: false
+  private: false

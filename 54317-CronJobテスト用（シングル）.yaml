@@ -1,0 +1,40 @@
+# 待機する
++wait_1:
+  action>: Wait
+  time: 300000
+  private: false
+
+# ブラウザを開く
++open_browser_1:
+  action>: OpenBrowser
+  url: 'https://www.yahoo.co.jp/'
+  lang: 'ja-JP'
+  headless: true
+  useShadowDomSelector: false
+  private: false
+
+# ブラウザを閉じる
++close_browser_1:
+  action>: CloseBrowser
+  browser: +open_browser_1
+  private: false
+
+# テキストを作成
++text_1:
+  action>: Text
+  text: test
+  private: false
+
+# Gmailを取得
++gmail_get_1:
+  action>: GmailGet
+  query: 'from:news@ns.chatwork.com'
+  provider: gsmail_3ce0a7ac98a9e3028c77
+  limit: 5
+  private: false
+  meta:
+    display:
+      provider:
+        type: chip
+        label: 'Gmail for Google Workspace (ayumu.niwa@tutorial.co.jp)'
+        icon: gsmail

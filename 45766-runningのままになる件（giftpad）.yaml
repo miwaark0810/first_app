@@ -1,0 +1,229 @@
+# ブラウザを開く
++open_browser_1:
+  action>: OpenBrowser
+  url: 'https://giftpad.jp/partners/'
+  lang: 'ja-JP'
+  headless: true
+
+# 文字入力
++type_text_1:
+  action>: TypeText
+  browser: +open_browser_1
+  selector: ':nth-child(1) > .form-control'
+  text: ${Id_}
+  clearValue: false
+  ignoreError: true
+
+# 文字入力
++type_text_2:
+  action>: TypeText
+  browser: +type_text_1
+  selector: ':nth-child(2) > .form-control'
+  text: ${password}
+  clearValue: false
+  ignoreError: true
+
+# クリック
++click_1:
+  action>: Click
+  browser: +type_text_2
+  selector: '.btn'
+  confirm: true
+  waitAfter: 25000
+  ignoreError: true
+  timeout: 30000
+
+# データを取得する
++data_store_get_1:
+  action>: DataStoreGet
+  key: gift_hasso
+
+# 変数に保存
++store_value_2:
+  action>: StoreValue
+  key: gift_hasso
+  value: +data_store_get_1
+
+# テキストを作成
++text_1:
+  action>: Text
+  text: ${g_hasso}
+
+# 各要素について繰り返す
++for_each_1:
+  for_each>:
+    hasso: ${g_hasso}
+  _do:
+
+    # 繰り返しを終了する
+    +break_if_1:
+      break_if>: ${gift_hasso ==  hasso[0]}
+
+    # Slackでメッセージを送信
+    +send_slack_message_1:
+      action>: SendSlackMessage
+      provider: slack_43fc09f3f044d594aef4
+      channel: '#automation_order'
+      text: 'Giftpad（${hasso[0]}）登録開始'
+      send_select: false
+      response_message: false
+      meta:
+        display:
+          provider:
+            type: chip
+            label: 'Slack (UpSwell, Inc.)'
+            icon: slack
+
+    # 文字入力  こっからループ  (左枠に入力）
+    +type_text_3:
+      action>: TypeText
+      browser: +click_1
+      selector: ':nth-child(3) > .col-md-4 > :nth-child(3)'
+      text: ${hasso[0]}
+      clearValue: true
+      ignoreError: true
+
+    # 文字入力　　 (右枠に入力）
+    +type_text_4:
+      action>: TypeText
+      browser: +type_text_3
+      selector: ':nth-child(3) > .col-md-4 > :nth-child(4)'
+      text: ${hasso[0]}
+      clearValue: true
+      ignoreError: true
+
+    # クリック  検索
+    +click_4:
+      action>: Click
+      browser: +type_text_4
+      selector: 'form#form_search button[type="button"].btn.btn-primary.btn-sm'
+      confirm: true
+      waitAfter: 20000
+      ignoreError: true
+      timeout: 30000
+
+    # スクリーンショットを撮る
+    +take_screenshot_1:
+      action>: TakeScreenshot
+      browser: +click_4
+      full_page: true
+      type: png
+      highResolution: true
+
+    # クリック　　注文を開く　　tbody > :nth-child(1) > :nth-child(2)
+    +click_2:
+      action>: Click
+      browser: +click_4
+      selector: 'tbody > tr:nth-child(1) > td:nth-child(2)'
+      confirm: true
+      waitAfter: 9000
+      ignoreError: true
+      timeout: 30000
+
+    # スクリーンショットを撮る
+    +take_screenshot_2:
+      action>: TakeScreenshot
+      browser: +click_2
+      full_page: true
+      type: png
+      waitBefore: 3000
+
+    # 選択肢を選ぶ  発送済みに変更
+    +select_option_1:
+      action>: SelectOption
+      browser: +click_2
+      selector: '#lst_data_status'
+      value: 2
+      text: ''
+      confirm: true
+      waitAfter: 2000
+      ignoreError: true
+
+    # 文字入力　　送り状番号（　　＝＝？？？？受注番号）
+    +type_text_6:
+      action>: TypeText
+      browser: +select_option_1
+      selector: 'input[name="invoice_number"]'
+      text: ${hasso[2]}
+      clearValue: false
+      ignoreError: true
+
+    # 文字入力  発送日入力
+    +type_text_5:
+      action>: TypeText
+      browser: +select_option_1
+      selector: 'form#frm_dialog_modal input[name="shipping_commit_date"]'
+      text: ${hasso[3]}
+      clearValue: false
+      ignoreError: true
+
+    # キーを送信
+    +send_keys_1:
+      action>: SendKeys
+      browser: +type_text_5
+      selector: 'form#frm_dialog_modal input[name="shipping_commit_date"]'
+      keys: ["Enter"]
+      ignoreError: true
+
+    # スクリーンショットを撮る
+    +take_screenshot_4:
+      action>: TakeScreenshot
+      browser: +send_keys_1
+      full_page: true
+      type: png
+
+    # 要素を見つける
+    +find_element_1:
+      action>: FindElement
+      browser: +send_keys_1
+      find_by: button_contains
+      value: '変更する'
+      timeout: 10000
+      visible: true
+
+    # クリック 変更する
+    +click_5:
+      action>: Click
+      browser: +type_text_5
+      selector: '.modal-footer > .btn'
+      confirm: true
+      waitAfter: 10000
+      ignoreError: true
+      timeout: 30000
+
+    # クリック   閉じる
+    +click_3:
+      action>: Click
+      browser: +click_2
+      selector: 'form#frm_dialog_modal div.modal-header > button[type="button"]'
+      confirm: true
+      ignoreError: true
+      timeout: 30000
+
+    # スクリーンショットを撮る
+    +take_screenshot_3:
+      action>: TakeScreenshot
+      browser: +click_3
+      full_page: false
+      type: png
+
+    # Slackでメッセージを送信
+    +send_slack_message_2:
+      action>: SendSlackMessage
+      provider: slack_43fc09f3f044d594aef4
+      channel: '#automation_order'
+      text: 'Giftpad（${hasso[0]}）登録完了'
+      send_select: false
+      response_message: false
+      meta:
+        display:
+          provider:
+            type: chip
+            label: 'Slack (UpSwell, Inc.)'
+            icon: slack
+
+# データを保存する
++data_store_save_1:
+  action>: DataStoreSave
+  key: gift_hasso
+  value: ${g_hasso[0][0]}

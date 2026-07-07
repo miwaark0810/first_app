@@ -1,0 +1,93 @@
+# ファイルを取得
++get_file_1:
+  action>: GetFile
+  provider: box_c612c4021c6a5d50f917
+  filename: 1718334143276
+  private: false
+  meta:
+    display:
+      provider:
+        type: chip
+        label: 'Box (kaihatsu@robokura.com)'
+        icon: box
+      filename:
+        label: '光る君へ41回完本原稿（3人）.docx'
+        icon: text
+        type: chip
+
+# ファイルをBase64でエンコードする
++encode_file_to_base64_1:
+  action>: EncodeFileToBase64
+  filepath: +get_file_1
+  private: false
+
+# 原稿解析関数
++call_learned_model_1:
+  action>: CallLearnedModel
+  id: 8
+  params:
+    word_base64: +encode_file_to_base64_1
+    scene_specific_string: '〇'
+    title_specific_string: T
+    stage_direction_specific_string: 'スペース'
+  private: false
+  meta:
+    interface:
+      params:
+        base64に変換したWord: Text
+        場面の特定文字: Text
+        タイトルの特定文字: Text
+        ト書きの特定文字: Text
+    display:
+      id:
+        type: chip
+        label: '原稿解析関数'
+        icon: build
+        color: '#0097A7'
+
+# 台本整形関数
++call_learned_model_2:
+  action>: CallLearnedModel
+  id: 9
+  params:
+    script_json: +call_learned_model_1
+    stories_number: 1
+    character_name_separator: '、'
+    paragraphs_per_page: 16
+    response_type: arraybuffer
+    filename: '台本（光る君へ）41完3人.docx'
+  private: false
+  meta:
+    interface:
+      params:
+        台本の行オブジェクト配列: List
+        話数: Number
+        人物名区切り文字: Text
+        1ページごとの段落数: Number
+        レスポンスの形式: Text
+        ファイル名: Text
+    display:
+      id:
+        type: chip
+        label: '台本整形関数'
+        icon: build
+        color: '#0097A7'
+
+# ファイルを保存
++save_file_1:
+  action>: SaveFile
+  provider: box_c612c4021c6a5d50f917
+  filename: +call_learned_model_2
+  directory: 274082922369
+  createPath: false
+  private: false
+  meta:
+    display:
+      directory:
+        label: '完成台本'
+        icon: folder
+        type: chip
+      provider:
+        type: chip
+        label: 'Box (kaihatsu@robokura.com)'
+        icon: box

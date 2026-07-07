@@ -1,0 +1,84 @@
+# ログインページを開く
++open_browser_1:
+  action>: OpenBrowser
+  url: 'https://tutorial-staging:password9876@console.devk8s.com/users/sign_in '
+  lang: ja-JP
+  timeZone: Asia/Tokyo
+  headless: true
+  confirm: true
+  windowSize: 1920 x 1080
+  useShadowDomSelector: false
+  private: false
+
+# Emailを入力
++type_text_4:
+  action>: TypeText
+  browser: "+open_browser_1"
+  selector: "#app > div > div > div > div > div.card__text.pt-0 > form > div:nth-child(2)
+    > div.input-group__input > input[type=email]"
+  text: kaihatsu+admin@robokura.com
+  clearValue: false
+  ignoreError: true
+  private: false
+
+# パスワード入力
++type_password_1:
+  action>: TypePassword
+  browser: "+open_browser_1"
+  selector: "#app > div > div > div > div > div.card__text.pt-0 > form > div:nth-child(3)
+    > div.input-group__input > input[type=password]"
+  password: "********"
+  waitAfter: 3000
+  ignoreError: true
+  private: false
+
+# ログインボタンをクリック
++click_5:
+  action>: Click
+  browser: "+open_browser_1"
+  selector: "#app > div > div > div > div > div.card__text.pt-0 > form > div.layout.justify-center
+    > div > button"
+  confirm: true
+  waitAfter: 5000
+  ignoreError: true
+  timeout: 30000
+  private: false
+
+# UI_E2E_TESTを検索
++type_text_3:
+  action>: TypeText
+  browser: "+click_5"
+  selector: "#inspire > div.application--wrap > div > main > div > div > div.view
+    > div > div.layout.mb-4.row.wrap > div.input-group.input-group--append-icon.input-group--hide-details.input-group--text-field.input-group--single-line.primary--text
+    > div.input-group__input > input[type=text]"
+  text: UI_E2E_TEST
+  clearValue: false
+  ignoreError: true
+  private: false
+
+# UI_E2E_TESTをクリック
++click_1:
+  action>: Click
+  browser: "+type_text_3"
+  selector: "#inspire > div.application--wrap > div > main > div > div > div.view
+    > div > div:nth-child(3) > ul > li > div"
+  confirm: true
+  ignoreError: true
+  timeout: 30000
+  private: false
+
+# ページ内でJavaScriptを実行する
++inject_script_1:
+  action>: InjectScript
+  browser: "+click_1"
+  code: 'location.reload();
+
+    '
+  returnValue: false
+  private: false
+
+# URLを取得
++get_u_r_l_1:
+  action>: GetURL
+  browser: "+inject_script_1"
+  private: false

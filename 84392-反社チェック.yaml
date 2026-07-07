@@ -1,0 +1,168 @@
+# テキストを作成_メモ（削除してください）
++text_2:
+  action>: Text
+  text: "【要設定】と書かれたアクションで、【】で囲まれた箇所を設定してください。\n設定が終わったら、【要設定】の文言と、このメモは削除してください。"
+  private: false
+
+# テキストを作成_標準反社チェックワード（AUTORO反社チェックアプリのネガティブワードに設定する）
++text_1:
+  action>: Text
+  text: '粉飾,横領,着服,背任,脱税,申告漏れ,違反,逮捕'
+  private: false
+
+# スクリプトを実行_反社チェックアプリから渡されるパラメータのログ用（配列などあるため、RunScript使用）
++run_script_1:
+  action>: RunScript
+  code: "return {\n  account,\n  targetKeyword,\n  negativeKeywords,\n  ticketId\n};\n"
+  private: false
+
+# 【要設定】テキストを作成_読んだら削除してください
++text_3:
+  action>: Text
+  text: 'データストアに、「AUTORO反社チェックAPIキー」という名前でAPIキーを登録しておいてください。'
+  private: false
+
+# データを取得する_AUTORO反社チェックAPIキー
++data_store_get_1:
+  action>: DataStoreGet
+  key: 'AUTORO反社チェックAPIキー'
+  private: false
+
+# 変数に保存_autoroAppApiKey
++store_value_1:
+  action>: StoreValue
+  key: autoroAppApiKey
+  value: +data_store_get_1
+  setIfNotDefined: false
+  private: false
+
+# エラーを捕捉する
++try_1:
+  try>: entireError
+  _do:
+
+    # AUTORO反社チェック_Google検索ver_4.1（検索窓使用・ファイル非保存・オプションクエリ）
+    +call_custom_action_1:
+      action>: CallCustomAction
+      id: ca_1b105107fa614fd2a0ff
+      params:
+        maxArticlesCount: 4
+        shouldStepIntoArticlePage: ''
+        targetKeyword: ${targetKeyword}
+        negativeKeywords: ${negativeKeywords}
+        optionQuery: ''
+      meta:
+        version: '2024-10-16T12:07:59.000Z'
+        interface:
+          params:
+            maxArticlesCount: Text
+            shouldStepIntoArticlePage: Boolean
+            targetKeyword: Text
+            negativeKeywords: Text
+            optionQuery: Text
+          output: Anything
+          pickers:
+        display:
+          id:
+            type: chip
+            label: 'AUTORO反社チェック_Google検索ver_4.1（検索窓使用・ファイル非保存・オプションクエリ）'
+            icon: build
+            imageUrl: 'https://storage.googleapis.com/robotic-crowd-production/8dehst8x39p1ls3rz7ziris4g1hj?GoogleAccessId=strage-object-creater%40robotic-crowd.iam.gserviceaccount.com&Expires=1731486548&Signature=uSU%2BwExbiNmgwAZpKX6JI54w7VvHSZIAxO0FXe7Mq8C3iBV9VBA6MSOePkwWoEwpsY21XgQjqedXxmpjULqAWALb%2BlXIbnwjjYDVerVCTPYag1lLk%2Fka7z7SzQNHPy59uU6QCIQTs8bWEADkC2AHStTu9zfIQhLru8W8Ip6UVJ%2FncknMbM8zIOnuCicNvqFzT9NIiuhuWCOZg5BUnsST%2BEeXm26TP67bDaDFrDSE8orpDUEdNPqzCH%2FX5HIHfKgbN5NUXsoA%2FkJLXk5%2FreuP%2BJb8adWFHOIKGY%2BUQ6L0c8iw%2BZfjj10RunjBTh2KTtKJrTY%2BZIoszvZb7F23e9uqiw%3D%3D&response-content-disposition=inline%3B+filename%3D%22AUTORO_LOGO_RGB_mark_logo_org.png%22%3B+filename%2A%3DUTF-8%27%27AUTORO_LOGO_RGB_mark_logo_org.png&response-content-type=image%2Fpng'
+            color: '#0097A7'
+
+    # 【要設定】AUTORO反社チェック_検索結果をストレージに保存
+    +call_custom_action_2:
+      action>: CallCustomAction
+      id: ca_2bfa4cab62658b08b3b5
+      params:
+        storageProviderId: gdrive_ce0099402f475b432ab8
+        isSetFullFolderPath: ''
+        folderPath: '反社チェックテスト'
+        customNameForSearchResultPdf: ''
+        searchMedia: google
+        searchResultObj: +call_custom_action_1
+        targetKeyword: ${targetKeyword}
+        account: ${account}
+      meta:
+        version: '2023-03-23T15:59:41.000Z'
+        interface:
+          params:
+            storageProviderId: Text
+            isSetFullFolderPath: Boolean
+            folderPath: Text
+            customNameForSearchResultPdf: Text
+            searchMedia: Text
+            searchResultObj: Text
+            targetKeyword: Text
+            account: Text
+          output: Anything
+          pickers:
+        display:
+          id:
+            type: chip
+            label: 'AUTORO反社チェック_検索結果をストレージに保存'
+            icon: build
+            imageUrl: 'https://storage.googleapis.com/robotic-crowd-production/azg85ie2wl01y51f8rz2iz8jyjh8?GoogleAccessId=strage-object-creater%40robotic-crowd.iam.gserviceaccount.com&Expires=1679601404&Signature=AKMPmtQvDXrlFshIQi91GnvnQSvTngRTem9wQ38izN%2B00hOmOwM7C5%2FVztuhhnnyt8FHO47r7s8Ax7spSnV7988XrWW3Ulj6Fo2oShjGPECDUGLivTXqYf9I0YSvbFlZCVTF2S8M8RZQMSwtPsUa%2F4acs0Z49ZrhoWIZQkYJc0WAVsQSKUrwtvqw23o3lgPdvwG2ng1f3KAkNpSuP%2FrTCpGMhfgq8IgcqBab6VZOWdMzIAeS75y61qNQygZt7kxwFzn0Fx66rlKHWD04bLXToMuHbhmckwhQiZiz68iSzM1T90mZ4I0bsSKbkyanDfiIM0OaEQb6RiUT7uXN3pumJQ%3D%3D&response-content-disposition=inline%3B+filename%3D%22AUTORO_LOGO_RGB_mark_logo+%25281%2529.png%22%3B+filename%2A%3DUTF-8%27%27AUTORO_LOGO_RGB_mark_logo%2520%25281%2529.png&response-content-type=image%2Fpng'
+            color: '#303F9F'
+          storageProviderId:
+            type: chip
+            label: 'Google Drive (ayumu.niwa@autoro.io)'
+            icon: googledrive
+
+    # AUTORO反社チェック_調査結果登録APIを使用
+    +call_custom_action_3:
+      action>: CallCustomAction
+      id: ca_a1a460a25b218eedc68e
+      params:
+        resultObj: +call_custom_action_2
+        ticketId: ${ticketId}
+        rocoSearchApiKey: ${autoroAppApiKey}
+      meta:
+        version: '2023-02-27T12:06:32.000Z'
+        interface:
+          params:
+            resultObj: Text
+            ticketId: Text
+            rocoSearchApiKey: Text
+          output: Anything
+          pickers:
+        display:
+          id:
+            type: chip
+            label: 'AUTORO反社チェック_調査結果登録APIを使用'
+            icon: build
+            imageUrl: 'https://storage.googleapis.com/robotic-crowd-production/ifhppk7g0ej3c9a2seykausc3eiz?GoogleAccessId=strage-object-creater%40robotic-crowd.iam.gserviceaccount.com&Expires=1679601450&Signature=AjzjWXVHxXx6ClQ2t7Hfx6UeNL%2BULbrbeXi84BgJdHsa2Jd9fcW9l8UwY5H%2FJxQTgSfSsAjz4syqZW2YQKn5MzylCtcrWRfP8GiUmkLJsMOAyfRyBequppUF5aTgRl0MRDQor43jL2ANyRBbck79tHMXc5086lCz8C2LpfOaPODw3%2FhM6TObDQe0BRScmhww%2FwShPvVmBGSs5Sa4%2F%2B8P0oW6Q1mYSX2Xgyq04iRIm4FCXGp%2FTcqXl9moRzFFZlbyJBDq58jnhM9zbOK9nvHVtuBl0DwaikLi4YURehJukWHkNwM27FlhxmtwtlnpM1g3a3PX0o0Alni81Hd1%2Ff2Q%2BA%3D%3D&response-content-disposition=inline%3B+filename%3D%22AUTORO_LOGO_RGB_mark_logo+%25281%2529.png%22%3B+filename%2A%3DUTF-8%27%27AUTORO_LOGO_RGB_mark_logo%2520%25281%2529.png&response-content-type=image%2Fpng'
+            color: '#303F9F'
+
+# AUTORO反社チェック_検索WFの偶発エラーリトライ処理
++call_custom_action_4:
+  action>: CallCustomAction
+  id: ca_10c8a59435cbab959730
+  params:
+    rocoSearchApiKey: ${autoroAppApiKey}
+    errObj: ${entireError}
+    account: ${account}
+    ticketId: ${ticketId}
+    targetKeyword: ${targetKeyword}
+    negativeKeywords: ${negativeKeywords}
+    retryWorkflowId: ${WORKFLOW_ID}
+  meta:
+    version: '2023-09-20T02:50:29.000Z'
+    interface:
+      params:
+        rocoSearchApiKey: Text
+        errObj: Text
+        account: Text
+        ticketId: Text
+        targetKeyword: Text
+        negativeKeywords: Text
+        retryWorkflowId: Text
+      output: Anything
+      pickers:
+    display:
+      id:
+        type: chip
+        label: 'AUTORO反社チェック_検索WFの偶発エラーリトライ処理'
+        icon: build
+        imageUrl: 'https://storage.googleapis.com/robotic-crowd-production/mapbhx1ywlsgv8utldwad1jo59ne?GoogleAccessId=strage-object-creater%40robotic-crowd.iam.gserviceaccount.com&Expires=1695281235&Signature=eT0ihxft8FJysWAEuzEDgxJGa%2F9bU2sJFD1yNxu1YpVb8S1Pb9fifio8M%2FGvvrxsNX%2B5Mw62nIxmvMZA0%2BdKYd3%2BfsF8vo0lMMtLm8Dawnr%2Fla5h4dvWCPpMl8qHn9PvM5tvvvXiUmKSXQV9bbUyBfQTrWtfJJUVQWnIA6mBolFHe8eiky6NWFlPVqjq6m%2Bg5WoC6cg3jxHJrLD2UCA59Yw01tBhYLZ4xnJtZcsTfRDGAIv3JZyj3KlCn0sLYR1GMJfYi90uATEwNDotWeLI3AtX32IavwOqp0M1klXaJFWAWD8svUiu%2FwqSTkD2D6Rvw7HiHmyQbsk55O8wYEYyTw%3D%3D&response-content-disposition=inline%3B+filename%3D%22AUTORO_LOGO_RGB_mark_logo.png%22%3B+filename%2A%3DUTF-8%27%27AUTORO_LOGO_RGB_mark_logo.png&response-content-type=image%2Fpng'
+        color: '#303F9F'

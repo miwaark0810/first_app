@@ -1,0 +1,35 @@
+# ファイルを取得
++get_file_1:
+  action>: GetFile
+  display_name>: 'ファイルを取得'
+  provider: local
+  filename: rc_0e5a0fe954d216e8b5f5
+  private: false
+  meta:
+    display:
+      filename:
+        label: '1.png'
+        icon: text
+        type: chip
+    action:
+      disabled: false
+
+# Slackでメッセージを送信
++send_slack_message_1:
+  action>: SendSlackMessage
+  display_name>: 'Slackでメッセージを送信'
+  provider: slack_350ae944d27bcc12420c
+  channel: '#niwa_private'
+  text: test
+  file: +get_file_1
+  send_select: false
+  response_message: false
+  private: false
+  meta:
+    display:
+      provider:
+        type: chip
+        label: 'Slack (RoboticCrowd Inc.)'
+        icon: slack
+    action:
+      disabled: false

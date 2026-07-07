@@ -1,0 +1,4 @@
+# スクリプトを実行
++run_script_1:
+  action>: RunScript
+  code: 'return error;'

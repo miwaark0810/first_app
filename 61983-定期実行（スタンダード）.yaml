@@ -1,0 +1,5 @@
+# テキストを作成
++text_1:
+  action>: Text
+  text: 'スタンダード実行'
+  private: false

@@ -1,0 +1,19 @@
+# マウスクリック
++mouse_click_1:
+  action>: MouseClick
+  display_name>: 'マウスクリック'
+  button: LEFT
+  count: 1
+  mode: IMAGE_RECOGNITION
+  priorityMode: WINDOW_DETECTION
+  target: ''
+  windowDetectionTarget: ''
+  withKey: ''
+  timeout: 10000
+  confidence: 95
+  waitBefore: 600
+  waitAfter: 200
+  private: false
+  meta:
+    action:
+      disabled: false

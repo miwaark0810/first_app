@@ -1,0 +1,204 @@
+# ブラウザを開く
++open_browser_1:
+  action>: OpenBrowser
+  display_name>: 'ブラウザを開く'
+  url: 'https://www.wikipedia.org/'
+  lang: 'ja-JP'
+  timeZone: 'Asia/Tokyo'
+  headless: true
+  confirm: true
+  useShadowDomSelector: false
+  private: false
+  meta:
+    action:
+      disabled: false
+
+# ページ内でJavaScriptを実行する
++inject_script_1:
+  action>: InjectScript
+  display_name>: '検索ボックスにJavaScriptと入力して、検索ボタンをクリックして検索を実行する'
+  browser: +open_browser_1
+  code: ''
+  waitAfter: 5000
+  returnValue: false
+  private: false
+  meta:
+    action:
+      disabled: false
+
+# ページ内でJavaScriptを実行する
++inject_script_2:
+  action>: InjectScript
+  display_name>: 'タイトル部分（JavaScriptという文字）を取得する'
+  browser: +inject_script_1
+  code: "\n"
+  returnValue: true
+  private: false
+  meta:
+    action:
+      disabled: false
+
+# ページ内でJavaScriptを実行する
++inject_script_3:
+  action>: InjectScript
+  display_name>: '左上のWikipediaのロゴ部分の背景色をlightblueに変更する'
+  browser: +inject_script_1
+  code: ''
+  waitAfter: 3000
+  returnValue: false
+  private: false
+  meta:
+    action:
+      disabled: false
+
+# ブラウザを閉じる
++close_browser_1:
+  action>: CloseBrowser
+  display_name>: 'ブラウザを閉じる'
+  browser: +inject_script_3
+  private: false
+  meta:
+    action:
+      disabled: false
+
+# ブラウザを開く
++open_browser_2:
+  action>: OpenBrowser
+  display_name>: 'ブラウザを開く'
+  url: 'https://example.com/'
+  lang: 'ja-JP'
+  headless: true
+  confirm: true
+  useShadowDomSelector: false
+  private: false
+  meta:
+    action:
+      disabled: false
+
+# ページ内でJavaScriptを実行する
++inject_script_4:
+  action>: InjectScript
+  display_name>: 'ボタンを作成（テキストを「Yahoo!ニュースへ移動」、クリック時にページ遷移する）'
+  browser: +open_browser_2
+  code: "\n"
+  waitAfter: 3000
+  returnValue: false
+  private: false
+  meta:
+    action:
+      disabled: false
+
+# クリック
++click_2:
+  action>: Click
+  display_name>: 'クリック'
+  browser: +inject_script_4
+  selector: button
+  confirm: true
+  ignoreError: true
+  timeout: 30000
+  private: false
+  meta:
+    action:
+      disabled: false
+
+# ブラウザを閉じる
++close_browser_2:
+  action>: CloseBrowser
+  display_name>: 'ブラウザを閉じる'
+  browser: +click_2
+  private: false
+  meta:
+    action:
+      disabled: false
+
+# ブラウザを開く
++open_browser_3:
+  action>: OpenBrowser
+  display_name>: 'ブラウザを開く'
+  url: 'https://example.com/'
+  lang: 'ja-JP'
+  headless: true
+  confirm: true
+  useShadowDomSelector: false
+  private: false
+  meta:
+    action:
+      disabled: false
+
+# ページ内でJavaScriptを実行する
++inject_script_6:
+  action>: InjectScript
+  display_name>: 'ページ内の <body> をクリックしたらアラートを表示（「example.com のページがクリックされました！」）'
+  browser: +open_browser_3
+  code: ''
+  waitAfter: 3000
+  returnValue: false
+  private: false
+  meta:
+    action:
+      disabled: false
+
+# クリック
++click_1:
+  action>: Click
+  display_name>: '実際にクリックしてアラートが表示されるか確認'
+  browser: +inject_script_6
+  selector: body
+  confirm: true
+  ignoreError: true
+  timeout: 30000
+  private: false
+  meta:
+    action:
+      disabled: false
+
+# ブラウザを閉じる
++close_browser_3:
+  action>: CloseBrowser
+  display_name>: 'ブラウザを閉じる'
+  browser: +click_1
+  private: false
+  meta:
+    action:
+      disabled: false
+
+# ブラウザを開く
++open_browser_4:
+  action>: OpenBrowser
+  display_name>: 'ブラウザを開く'
+  url: 'https://example.com/'
+  lang: 'ja-JP'
+  headless: true
+  confirm: true
+  useShadowDomSelector: false
+  private: false
+  meta:
+    action:
+      disabled: false
+
+# ページ内でJavaScriptを実行する
++inject_script_9:
+  action>: InjectScript
+  display_name>: '「次へ」ボタンがランダムなタイミングで表示され、それを検知して自動クリックする（クリックすると yahoo に遷移する）'
+  browser: +open_browser_4
+  code: ''
+  waitAfter: 5000
+  returnValue: false
+  private: false
+  meta:
+    action:
+      disabled: false
+
+# スクリーンショットを撮る
++take_screenshot_1:
+  action>: TakeScreenshot
+  display_name>: 'スクリーンショットを撮る'
+  browser: +inject_script_9
+  full_page: false
+  type: png
+  waitBefore: 3000
+  private: false
+  meta:
+    action:
+      disabled: false

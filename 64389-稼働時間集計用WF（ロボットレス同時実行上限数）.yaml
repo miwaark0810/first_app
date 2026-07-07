@@ -1,0 +1,201 @@
+# ロボットレス同時実行上限シート取得
++get_spreadsheet_1:
+  action>: GetSpreadsheet
+  provider: gsheet_846866b1bb4e685cf58c
+  spreadsheet_id: '1RUPXZUiJtb-4IZT95mb95sSSUDJ2lrw2O8ASXrRBmPQ'
+  private: false
+  meta:
+    display:
+      provider:
+        type: chip
+        label: 'Google Spreadsheet (ayumu.niwa@tutorial.co.jp)'
+        icon: googlespreadsheet
+      spreadsheet_id:
+        label: 'ロボットレス同時実行上限数'
+        icon: text
+        type: chip
+
+# 組織＋ロボットレス同時実行上限
++get_cells_1:
+  action>: GetCells
+  spreadsheet: +get_spreadsheet_1
+  range: 'A:D'
+  findAll: false
+  private: false
+
+# 組織ID、組織名、ロボットレス同時実行上限（占有）、ロボットレス同時実行上限（共有）
++store_value_1:
+  action>: StoreValue
+  key: maxRobotlessConcurrencyArr
+  value: +get_cells_1
+  private: false
+
+# 最新のプランの要素のみの配列
++store_value_3:
+  action>: StoreValue
+  key: newMaxRobotlessConcurrencyArr
+  value: []
+  private: false
+
+# maxRobotlessConcurrencyArr について繰り返す
++for_each_1:
+  for_each>:
+    organizationMaxRobotlessConcurrency: ${maxRobotlessConcurrencyArr}
+    withIndex: index
+  _do:
+
+    # maxRobotlessConcurrencyArr の要素数
+    +store_value_2:
+      action>: StoreValue
+      key: length
+      value: ${maxRobotlessConcurrencyArr.length}
+      private: false
+
+    # 配列の最後の要素または、組織id が次の要素の組織id と同一ではないとき
+    +if_1:
+      if>: ${index === (length-1) || maxRobotlessConcurrencyArr[index][0] !== maxRobotlessConcurrencyArr[index +1][0]}
+      _do:
+
+        # newMaxRobotlessConcurrencyArr に要素を追加する
+        +run_script_3:
+          action>: RunScript
+          code: "return newMaxRobotlessConcurrencyArr.push(organizationMaxRobotlessConcurrency);\n"
+          private: false
+
+# ロボットレス同時実行上限シートから取得した組織id のみの配列作成
++run_script_2:
+  action>: RunScript
+  code: "let ids = [];\nfor (let el of newMaxRobotlessConcurrencyArr) {\n  ids.push(el[0]);\n}\nids.shift();\nreturn ids;\n"
+  private: false
+
+# ロボットレス同時実行上限シートに存在する組織のid
++store_value_5:
+  action>: StoreValue
+  key: robotlessOrganizationIds
+  value: +run_script_2
+  private: false
+
+# まとめシート
++get_spreadsheet_2:
+  action>: GetSpreadsheet
+  provider: gsheet_846866b1bb4e685cf58c
+  spreadsheet_id: 1EgtZv3G1pXykwBSZbf1dTPTNvk7DwSq2CtEGAn7XGyE
+  private: false
+  meta:
+    display:
+      provider:
+        type: chip
+        label: 'Google Spreadsheet (ayumu.niwa@tutorial.co.jp)'
+        icon: googlespreadsheet
+      spreadsheet_id:
+        label: '利用状況集計（2023.09）'
+        icon: text
+        type: chip
+
+# まとめシートのヘッダーを更新
++update_cells_2:
+  action>: UpdateCells
+  spreadsheet: +get_spreadsheet_2
+  range: 'シート1!I1:J1'
+  values: ["ロボットレス同時実行上限（占有）","ロボットレス同時実行上限（共有）"]
+  private: false
+
+# まとめシートの組織id
++get_cells_2:
+  action>: GetCells
+  spreadsheet: +get_spreadsheet_2
+  range: 'シート1!A:A'
+  findAll: false
+  private: false
+
+# 全ての組織ids
++store_value_4:
+  action>: StoreValue
+  key: organizationIds
+  value: +get_cells_2
+  private: false
+
+# 全ての組織idの配列作成
++run_script_5:
+  action>: RunScript
+  code: "let flatArr = organizationIds.flat();\nflatArr.shift();\nreturn flatArr;\n"
+  private: false
+
+# idのみの配列
++store_value_8:
+  action>: StoreValue
+  key: AllOrganizationIds
+  value: +run_script_5
+  private: false
+
+# 全ての組織idを繰り返す
++for_each_2:
+  for_each>:
+    id: ${AllOrganizationIds}
+    withIndex: index
+  _do:
+
+    # 同時実行上限シートの組織idの配列の何番目にidが存在するか確認（存在しない場合-1）
+    +run_script_4:
+      action>: RunScript
+      code: "return robotlessOrganizationIds.indexOf(id);\n"
+      private: false
+
+    # 同時実行上限シートの組織idの配列内のインデックス（存在しない場合-1）
+    +store_value_10:
+      action>: StoreValue
+      key: isExistIndex
+      value: +run_script_4
+      private: false
+
+    # セルを書き換える値（デフォルト：0,0）
+    +store_value_11:
+      action>: StoreValue
+      key: value
+      value: [0,0]
+      private: false
+
+    # 同時実行上限組織id の中に組織idが存在するとき
+    +if_2:
+      if>: ${isExistIndex >= 0}
+      _do:
+
+        # newMaxRobotlessConcurrencyArr の中のindex
+        +store_value_12:
+          action>: StoreValue
+          key: maxRobotlessConcurrencyIndex
+          value: ${isExistIndex + 1}
+          private: false
+
+        # 更新するセルの値を作成
+        +run_script_1:
+          action>: RunScript
+          code: "let arr = [];\narr.push(\n  newMaxRobotlessConcurrencyArr[maxRobotlessConcurrencyIndex][2],\n  newMaxRobotlessConcurrencyArr[maxRobotlessConcurrencyIndex][3]\n);\nreturn arr;\n"
+          private: false
+
+        # 更新するセルの値
+        +store_value_13:
+          action>: StoreValue
+          key: value
+          value: +run_script_1
+          private: false
+
+    # 更新するシート名+セル
+    +text_1:
+      action>: Text
+      text: 'シート1!I${index + 2}:J${index + 2}'
+      private: false
+
+    # 待機する
+    +wait_1:
+      action>: Wait
+      time: 500
+      private: false
+
+    # セルの値を更新
+    +update_cells_1:
+      action>: UpdateCells
+      spreadsheet: +get_spreadsheet_2
+      range: +text_1
+      values: ${value}
+      private: false

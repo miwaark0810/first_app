@@ -1,0 +1,376 @@
+# ブラウザを開く
++open_browser_1:
+  action>: OpenBrowser
+  display_name>: 'ブラウザを開く'
+  url: 'https://www.yahoo.co.jp/'
+  lang: 'ja-JP'
+  userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3864.0 Safari/537.36'
+  headless: true
+  confirm: true
+  useShadowDomSelector: false
+  private: false
+
+# 変数に保存
++store_value_17:
+  action>: StoreValue
+  display_name>: '変数に保存'
+  key: ''
+  value: ''
+  setIfNotDefined: false
+  private: false
+
+# 繰り返し
++loop_1:
+  loop>:
+    display_name>: '繰り返し'
+    times: 500
+    private: false
+  _do:
+
+    # スクリーンショットを撮る
+    +take_screenshot_1:
+      action>: TakeScreenshot
+      display_name>: 'スクリーンショットを撮る'
+      browser: +open_browser_1
+      full_page: false
+      type: png
+      private: false
+
+    # テキストを取得
+    +get_text_1:
+      action>: GetText
+      display_name>: 'テキストを取得'
+      browser: +open_browser_1
+      selector: '._2j0udhv5jERZtYzddeDwcv:nth-child(1) ._1alzSpTqJzvSVUWqpx82d4'
+      ignoreError: true
+      private: false
+
+    # 検索して置換
+    +replace_text_1:
+      action>: ReplaceText
+      display_name>: '検索して置換'
+      text: +get_text_1
+      find: '/D'
+      use_regex: true
+      replace_with: ''
+      private: false
+
+    # テキストを作成
+    +text_1:
+      action>: Text
+      display_name>: 'テキストを作成'
+      text: 'a${i}'
+      private: false
+
+    # 変数に保存
+    +store_value_1:
+      action>: StoreValue
+      display_name>: '変数に保存'
+      key: test
+      value: +text_1
+      setIfNotDefined: false
+      private: false
+
+    # テキストを作成
+    +text_2:
+      action>: Text
+      display_name>: 'テキストを作成'
+      text: 'b${i}'
+      private: false
+
+    # 変数に保存
+    +store_value_2:
+      action>: StoreValue
+      display_name>: '変数に保存'
+      key: test2
+      value: +text_2
+      setIfNotDefined: false
+      private: false
+
+    # テキストを作成
+    +text_3:
+      action>: Text
+      display_name>: 'テキストを作成'
+      text: 'c${i}'
+      private: false
+
+    # 変数に保存
+    +store_value_3:
+      action>: StoreValue
+      display_name>: '変数に保存'
+      key: test3
+      value: +text_3
+      setIfNotDefined: false
+      private: false
+
+    # テキストを作成
+    +text_4:
+      action>: Text
+      display_name>: 'テキストを作成'
+      text: 'd${i}'
+      private: false
+
+    # 変数に保存
+    +store_value_4:
+      action>: StoreValue
+      display_name>: '変数に保存'
+      key: test4
+      value: +text_4
+      setIfNotDefined: false
+      private: false
+
+    # テキストを作成
+    +text_5:
+      action>: Text
+      display_name>: 'テキストを作成'
+      text: 'e${i}'
+      private: false
+
+    # 変数に保存
+    +store_value_5:
+      action>: StoreValue
+      display_name>: '変数に保存'
+      key: test5
+      value: +text_5
+      setIfNotDefined: false
+      private: false
+
+    # テキストを作成
+    +text_6:
+      action>: Text
+      display_name>: 'テキストを作成'
+      text: 'f${i}'
+      private: false
+
+    # 変数に保存
+    +store_value_7:
+      action>: StoreValue
+      display_name>: '変数に保存'
+      key: test6
+      value: +text_6
+      setIfNotDefined: false
+      private: false
+
+    # テキストを作成
+    +text_7:
+      action>: Text
+      display_name>: 'テキストを作成'
+      text: 'g${i}'
+      private: false
+
+    # 変数に保存
+    +store_value_6:
+      action>: StoreValue
+      display_name>: '変数に保存'
+      key: test7
+      value: +text_7
+      setIfNotDefined: false
+      private: false
+
+    # テキストを作成
+    +text_8:
+      action>: Text
+      display_name>: 'テキストを作成'
+      text: 'h${i}'
+      private: false
+
+    # 変数に保存
+    +store_value_8:
+      action>: StoreValue
+      display_name>: '変数に保存'
+      key: test8
+      value: +text_8
+      setIfNotDefined: false
+      private: false
+
+    # テキストを作成
+    +text_9:
+      action>: Text
+      display_name>: 'テキストを作成'
+      text: 'i${i}'
+      private: false
+
+    # 変数に保存
+    +store_value_9:
+      action>: StoreValue
+      display_name>: '変数に保存'
+      key: test9
+      value: +text_9
+      setIfNotDefined: false
+      private: false
+
+    # テキストを作成
+    +text_10:
+      action>: Text
+      display_name>: 'テキストを作成'
+      text: 'j${i}'
+      private: false
+
+    # 変数に保存
+    +store_value_10:
+      action>: StoreValue
+      display_name>: '変数に保存'
+      key: test10
+      value: +text_10
+      setIfNotDefined: false
+      private: false
+
+    # テキストを作成
+    +text_11:
+      action>: Text
+      display_name>: 'テキストを作成'
+      text: 'k${i}'
+      private: false
+
+    # 変数に保存
+    +store_value_11:
+      action>: StoreValue
+      display_name>: '変数に保存'
+      key: test11
+      value: +text_11
+      setIfNotDefined: false
+      private: false
+
+    # テキストを作成
+    +text_19:
+      action>: Text
+      display_name>: 'テキストを作成'
+      text: 'l${i}'
+      private: false
+
+    # 変数に保存
+    +store_value_13:
+      action>: StoreValue
+      display_name>: '変数に保存'
+      key: test12
+      value: +text_19
+      setIfNotDefined: false
+      private: false
+
+    # テキストを作成
+    +text_18:
+      action>: Text
+      display_name>: 'テキストを作成'
+      text: 'm${i}'
+      private: false
+
+    # 変数に保存
+    +store_value_14:
+      action>: StoreValue
+      display_name>: '変数に保存'
+      key: test13
+      value: +text_18
+      setIfNotDefined: false
+      private: false
+
+    # テキストを作成
+    +text_17:
+      action>: Text
+      display_name>: 'テキストを作成'
+      text: 'n${i}'
+      private: false
+
+    # 変数に保存
+    +store_value_15:
+      action>: StoreValue
+      display_name>: '変数に保存'
+      key: test14
+      value: +text_17
+      setIfNotDefined: false
+      private: false
+
+    # テキストを作成
+    +text_16:
+      action>: Text
+      display_name>: 'テキストを作成'
+      text: 'o${i}'
+      private: false
+
+    # 変数に保存
+    +store_value_16:
+      action>: StoreValue
+      display_name>: '変数に保存'
+      key: test15
+      value: +text_16
+      setIfNotDefined: false
+      private: false
+
+    # テキストを作成
+    +text_12:
+      action>: Text
+      display_name>: 'テキストを作成'
+      text: 'p${i}'
+      private: false
+
+    # 変数に保存
+    +store_value_18:
+      action>: StoreValue
+      display_name>: '変数に保存'
+      key: test16
+      value: +text_12
+      setIfNotDefined: false
+      private: false
+
+    # テキストを作成
+    +text_15:
+      action>: Text
+      display_name>: 'テキストを作成'
+      text: 'q${i}'
+      private: false
+
+    # 変数に保存
+    +store_value_19:
+      action>: StoreValue
+      display_name>: '変数に保存'
+      key: test17
+      value: +text_15
+      setIfNotDefined: false
+      private: false
+
+    # テキストを作成
+    +text_13:
+      action>: Text
+      display_name>: 'テキストを作成'
+      text: 'r${i}'
+      private: false
+
+    # 変数に保存
+    +store_value_20:
+      action>: StoreValue
+      display_name>: '変数に保存'
+      key: test18
+      value: +text_13
+      setIfNotDefined: false
+      private: false
+
+    # テキストを作成
+    +text_20:
+      action>: Text
+      display_name>: 'テキストを作成'
+      text: 's${i}'
+      private: false
+
+    # 変数に保存
+    +store_value_21:
+      action>: StoreValue
+      display_name>: '変数に保存'
+      key: test19
+      value: +text_20
+      setIfNotDefined: false
+      private: false
+
+    # テキストを作成
+    +text_14:
+      action>: Text
+      display_name>: 'テキストを作成'
+      text: 't${i}'
+      private: false
+
+    # 変数に保存
+    +store_value_12:
+      action>: StoreValue
+      display_name>: '変数に保存'
+      key: test20
+      value: +text_14
+      setIfNotDefined: false
+      private: false

@@ -1,0 +1,55 @@
+# ファイルをコピーする
++copy_file_1:
+  action>: CopyFile
+  provider: gdrive_02f65eb838b493f35dee
+  filename: '1FZwtFeF4_lv6Uh8tuX55hJI5-ZOfieQB58Ztvk3XCIc'
+  as: test
+  directory: '1fw-B-koQCEFRUTHusBq-APMb7fJNRVXI'
+  createPath: false
+  private: false
+  meta:
+    display:
+      provider:
+        type: chip
+        label: 'Google Drive (ayumu.niwa@tutorial.co.jp)'
+        icon: googledrive
+      filename:
+        label: 'ガントチャート（トリガー機能）'
+        icon: text
+        type: chip
+      directory:
+        label: '99. その他'
+        icon: folder
+        type: chip
+
+# 既存のスプレッドシートを取得
++get_spreadsheet_1:
+  action>: GetSpreadsheet
+  provider: gsheet_846866b1bb4e685cf58c
+  spreadsheet_id: '1FZwtFeF4_lv6Uh8tuX55hJI5-ZOfieQB58Ztvk3XCIc'
+  private: false
+  meta:
+    display:
+      provider:
+        type: chip
+        label: 'Google Spreadsheet (ayumu.niwa@tutorial.co.jp)'
+        icon: googlespreadsheet
+      spreadsheet_id:
+        label: 'ガントチャート（トリガー機能）'
+        icon: text
+        type: chip
+
+# シートをダウンロード
++download_sheets_1:
+  action>: DownloadSheets
+  spreadsheet: +get_spreadsheet_1
+  sheetname: 'ガントチャート'
+  type: xlsx
+  private: false
+
+# ダウンロードファイル一覧
++get_download_files_1:
+  action>: GetDownloadFiles
+  order: ASC
+  sort_by: FILENAME
+  private: false

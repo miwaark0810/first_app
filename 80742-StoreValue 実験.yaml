@@ -1,0 +1,96 @@
+# 変数に保存
++store_value_2:
+  action>: StoreValue
+  key: key1
+  value: '0'
+  setIfNotDefined: false
+  private: false
+  meta:
+    action:
+      disabled: false
+
+# 変数に保存
++store_value_3:
+  action>: StoreValue
+  key: key2
+  value: '0'
+  setIfNotDefined: false
+  private: false
+  meta:
+    action:
+      disabled: false
+
+# 変数に保存
++store_value_5:
+  action>: StoreValue
+  key: key3
+  value: '0'
+  setIfNotDefined: false
+  private: false
+  meta:
+    action:
+      disabled: false
+
+# 繰り返し
++loop_1:
+  loop>: 100
+  _do:
+
+    # 変数に保存
+    +store_value_1:
+      action>: StoreValue
+      key: key1
+      value: ${parseInt(key1) + 1}
+      setIfNotDefined: false
+      private: false
+      meta:
+        action:
+          disabled: false
+
+    # 変数に保存
+    +store_value_4:
+      action>: StoreValue
+      key: key2
+      value: ${parseInt(key2) + 1}
+      setIfNotDefined: false
+      private: false
+      meta:
+        action:
+          disabled: false
+
+    # 変数に保存
+    +store_value_6:
+      action>: StoreValue
+      key: key3
+      value: ${parseInt(key3) + 1}
+      setIfNotDefined: false
+      private: false
+      meta:
+        action:
+          disabled: false
+
+    # ブラウザを開く
+    +open_browser_1:
+      action>: OpenBrowser
+      url: 'https://example.com/'
+      lang: 'ja-JP'
+      headless: true
+      confirm: true
+      useShadowDomSelector: false
+      private: false
+      meta:
+        action:
+          disabled: false
+
+    # クリック
+    +click_1:
+      action>: Click
+      browser: +open_browser_1
+      selector: h1
+      confirm: true
+      ignoreError: true
+      timeout: 30000
+      private: false
+      meta:
+        action:
+          disabled: false

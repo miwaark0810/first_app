@@ -1,0 +1,42 @@
+# 繰り返し
++loop_1:
+  loop>: 1
+  _do:
+
+    # 日時を取得
+    +get_time_1:
+      action>: GetTime
+      format: 'YYYY-MM-DD HH:mm'
+      timezone: 'Asia/Tokyo'
+      relativeTime: ''
+      private: false
+
+    # 変数に保存
+    +store_value_1:
+      action>: StoreValue
+      key: current_time
+      value: +get_time_1
+      private: false
+
+    # Gmailを送信する
+    +gmail_send_1:
+      action>: GmailSend
+      provider: gsmail_3ce0a7ac98a9e3028c77
+      to: 'ayumu.niwa@autoro.io'
+      subject: 'subject:TDisT8tG6WtB '
+      body: 'テストです。${current_time}'
+      attachments: ''
+      from: ''
+      private: false
+      meta:
+        display:
+          provider:
+            type: chip
+            label: 'Gmail for Google Workspace (ayumu.niwa@tutorial.co.jp)'
+            icon: gsmail
+
+    # 待機する
+    +wait_1:
+      action>: Wait
+      time: 2000
+      private: false
